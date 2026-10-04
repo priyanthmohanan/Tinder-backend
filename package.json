@@ -1,7 +1,6 @@
 {
   "name": "namaste-node",
   "version": "1.0.0",
-  
   "scripts": {
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -15,6 +14,7 @@
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^18.0.5",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^6.21.0",
