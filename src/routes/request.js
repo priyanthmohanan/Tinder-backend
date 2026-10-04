@@ -89,14 +89,14 @@ requestRouter.post("/request/review/:status/:requestId", userAuth, async (req, r
 });
 
 //Feed API - GET all the users from the database
-requestRouter.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({});
-    return res.send(users);
-  } catch (err) {
-    return res.status(400).send("Error: " + err.message);
-  }
-});
+// requestRouter.get("/feed", async (req, res) => {
+//   try {
+//     const users = await User.find({});
+//     return res.send(users);
+//   } catch (err) {
+//     return res.status(400).send("Error: " + err.message);
+//   }
+// });
 
 
 module.exports = requestRouter;
