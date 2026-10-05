@@ -1,4 +1,5 @@
 
+require("dotenv").config();
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require("jsonwebtoken");
@@ -65,7 +66,7 @@ userSchema.index({ firstName: 1, lastName: 1 });
 
 userSchema.methods.getJWT = function () {
     const user = this;
-    const token = jwt.sign({ _id: user._id }, "secretKey", { expiresIn: "1d" });
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     console.log("Token Credentilas", token);
     return token;
 };
