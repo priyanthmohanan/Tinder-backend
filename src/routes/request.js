@@ -5,7 +5,10 @@ const { userAuth } = require("../middlewares/auth");
 const User = require('../models/user')
 const ConnectionRequest = require('../models/connectionRequest')
 
-
+const escapeHtml = (s = "") =>
+  String(s).replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
 
 //Send connection request//
 requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res) => {
