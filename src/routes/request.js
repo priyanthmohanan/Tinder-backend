@@ -1,5 +1,6 @@
 const express = require('express');
 const requestRouter = express.Router();
+const sendEmail = require("../utils/sendMail");
 const { userAuth } = require("../middlewares/auth");
 const User = require('../models/user')
 const ConnectionRequest = require('../models/connectionRequest')
@@ -46,10 +47,34 @@ requestRouter.post("/request/send/:status/:toUserId", userAuth, async (req, res)
     console.log("New connectionRequest", connectionRequest)
 
     const data = await connectionRequest.save();
+
+    // Send email only for "interested", without blocking or breaking the API response
+    console.log("STATUS:", status, "| TO:", toUser.emailID);
+
+    if (status === "interested") {
+      console.log("Trying to send email to:", toUser.emailID);
+
+      const fromName = escapeHtml(req.user.firstName);
+      const toName = escapeHtml(toUser.firstName);
+
+      sendEmail({
+        to: toUser.emailID,
+        subject: `${req.user.firstName} is interested in your profile`,
+        text: `Hi ${toUser.firstName}, ${req.user.firstName} is interested in your profile on DevTinder.`,
+        html: `<div style="font-family: Arial, sans-serif;">
+                 <h2>Hi ${toName},</h2>
+                 <p><strong>${fromName}</strong> is interested in your profile on DevTinder.</p>
+               </div>`,
+      })
+        .then((r) => console.log("SES accepted. MessageId:", r.MessageId))
+        .catch((err) => console.error("SES email failed:", err));
+    }
+
     return res.json({
       message: req.user.firstName + " " + status + " " + toUser.firstName,
-      data
-    })
+      data,
+    });
+
   } catch (err) {
     res.status(400).send("ERROR from send request: " + err.message)
   }
